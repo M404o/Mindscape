@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>こころのにじ - 学校版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro', 'Meiryo', 'メイリオ', sans-serif;
+        background: #ffffff;
+        min-height: 100vh;
+        color: #2d3748;
+        line-height: 1.6;
+    }
+
+    .app-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 100vh;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 3rem;
+        background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+        padding: 2rem;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.3)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.4)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.5)"/></svg>');
+        animation: float 20s linear infinite;
+    }
+
+    .logo {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+        position: relative;
+        z-index: 2;
+    }
+
+    .mascot {
+        font-size: 4rem;
+        margin: 1rem 0;
+        animation: bounce 2s infinite;
+    }
+
+    .welcome-section {
+        background: #f8fafc;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 2px solid #e2e8f0;
+        text-align: center;
+    }
+
+    .welcome-title {
+        font-size: 1.8rem;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .welcome-text {
+        font-size: 1.1rem;
+        color: #4a5568;
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    .mood-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .mood-btn {
+        background: #ffffff;
+        border: 3px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 1.5rem 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .mood-btn:hover {
+        transform: translateY(-5px);
+        border-color: #4299e1;
+        box-shadow: 0 10px 25px rgba(66, 153, 225, 0.2);
+    }
+
+    .mood-btn.selected {
+        border-color: #4299e1;
+        background: linear-gradient(135deg, #ebf8ff, #bee3f8);
+        transform: translateY(-3px);
+    }
+
+    .mood-emoji {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .mood-label {
+        font-size: 0.9rem;
+        color: #2d3748;
+        font-weight: 600;
+    }
+
+    .question-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        border: 2px solid #e2e8f0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    .question-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .question-number {
+        display: inline-block;
+        background: linear-gradient(135deg, #4299e1, #3182ce);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .question-title {
+        font-size: 1.5rem;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .question-subtitle {
+        font-size: 1rem;
+        color: #718096;
+    }
+
+    .answer-options {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .answer-btn {
+        background: #ffffff;
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+        font-size: 1rem;
+        color: #4a5568;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .answer-btn:hover {
+        border-color: #4299e1;
+        background: #f7fafc;
+        transform: translateX(5px);
+    }
+
+    .answer-btn.selected {
+        border-color: #4299e1;
+        background: linear-gradient(135deg, #ebf8ff, #bee3f8);
+        color: #2d3748;
+        font-weight: 600;
+    }
+
+    .answer-emoji {
+        font-size: 1.8rem;
+        min-width: 40px;
+    }
+
+    .text-input {
+        width: 100%;
+        min-height: 120px;
+        padding: 1.5rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        font-size: 1rem;
+        font-family: inherit;
+        resize: vertical;
+        transition: all 0.3s ease;
+        background: #ffffff;
+    }
+
+    .text-input:focus {
+        outline: none;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        background: #f7fafc;
+    }
+
+    .text-input::placeholder {
+        color: #a0aec0;
+        font-style: italic;
+    }
+
+    .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        gap: 1rem;
+    }
+
+    .nav-btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .nav-btn.back {
+        background: #f7fafc;
+        color: #4a5568;
+        border: 2px solid #e2e8f0;
+    }
+
+    .nav-btn.back:hover {
+        background: #edf2f7;
+        transform: translateY(-2px);
+    }
+
+    .nav-btn.next {
+        background: linear-gradient(135deg, #4299e1, #3182ce);
+        color: white;
+        box-shadow: 0 5px 15px rgba(66, 153, 225, 0.3);
+    }
+
+    .nav-btn.next:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(66, 153, 225, 0.4);
+    }
+
+    .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e2e8f0;
+        border-radius: 4px;
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4299e1, #3182ce);
+        border-radius: 4px;
+        transition: width 0.5s ease;
+        width: 0%;
+    }
+
+    .completion-screen {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: #ffffff;
+        border-radius: 20px;
+        border: 2px solid #e2e8f0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .completion-icon {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        animation: bounce 2s infinite;
+    }
+
+    .completion-title {
+        font-size: 2rem;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .completion-text {
+        font-size: 1.2rem;
+        color: #4a5568;
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    .teacher-section {
+        background: linear-gradient(135deg, #fff5f5, #fed7d7);
+        border: 2px solid #feb2b2;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-top: 3rem;
+    }
+
+    .teacher-title {
+        font-size: 1.5rem;
+        color: #742a2a;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .teacher-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 1.5rem;
+    }
+
+    .insights-box {
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 1.5rem;
+        border: 1px solid #feb2b2;
+    }
+
+    .insights-title {
+        font-size: 1.1rem;
+        color: #742a2a;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .insight-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: #4a5568;
+    }
+
+    .insight-icon {
+        font-size: 1.1rem;
+        min-width: 20px;
+    }
+
+    .actions-box {
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 1.5rem;
+        border: 1px solid #feb2b2;
+    }
+
+    .action-btn-teacher {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        background: linear-gradient(135deg, #e53e3e, #c53030);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .action-btn-teacher:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
+    }
+
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+
+    @keyframes float {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        .app-container {
+            padding: 1rem;
+        }
+        
+        .header {
+            padding: 1.5rem;
+        }
+        
+        .logo {
+            font-size: 2rem;
+        }
+        
+        .mood-buttons {
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        }
+        
+        .teacher-content {
+            grid-template-columns: 1fr;
+        }
+        
+        .navigation {
+            flex-direction: column;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="mascot">🌈</div>
+            <h1 class="logo">こころのにじ</h1>
+            <p class="subtitle">あなたの気持ちを大切にする場所</p>
+        </header>
+
+```
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Welcome Section -->
+    <section class="welcome-section" id="welcomeSection">
+        <h2 class="welcome-title">こんにちは！ 😊</h2>
+        <p class="welcome-text">
+            今日はあなたの気持ちについて、一緒におはなししましょう。<br>
+            正しい答えなんてありません。今の気持ちを、そのまま教えてくださいね。
+        </p>
+        
+        <p style="color: #718096; font-size: 0.9rem; margin-bottom: 2rem;">
+            まずは、今の気分に一番近いものを選んでください
+        </p>
+
+        <div class="mood-buttons">
+            <button class="mood-btn" onclick="selectMood('happy')">
+                <span class="mood-emoji">😊</span>
+                <span class="mood-label">元気</span>
+            </button>
+            <button class="mood-btn" onclick="selectMood('calm')">
+                <span class="mood-emoji">😌</span>
+                <span class="mood-label">おだやか</span>
+            </button>
+            <button class="mood-btn" onclick="selectMood('tired')">
+                <span class="mood-emoji">😴</span>
+                <span class="mood-label">つかれた</span>
+            </button>
+            <button class="mood-btn" onclick="selectMood('worried')">
+                <span class="mood-emoji">😟</span>
+                <span class="mood-label">しんぱい</span>
+            </button>
+            <button class="mood-btn" onclick="selectMood('confused')">
+                <span class="mood-emoji">🤔</span>
+                <span class="mood-label">よくわからない</span>
+            </button>
+            <button class="mood-btn" onclick="selectMood('sad')">
+                <span class="mood-emoji">😢</span>
+                <span class="mood-label">かなしい</span>
+            </button>
+        </div>
+
+        <div class="navigation">
+            <div></div>
+            <button class="nav-btn next" onclick="startQuestions()" disabled id="startBtn">
+                はじめる →
+            </button>
+        </div>
+    </section>
+
+    <!-- Question Card -->
+    <div class="question-card" id="questionCard" style="display: none;">
+        <div class="question-header">
+            <div class="question-number" id="questionNumber">質問 1</div>
+            <h3 class="question-title" id="questionTitle">今日の学校は楽しかったですか？</h3>
+            <p class="question-subtitle" id="questionSubtitle">あなたの気持ちに一番近いものを選んでください</p>
+        </div>
+
+        <div class="answer-options" id="answerOptions">
+            <!-- Options will be dynamically loaded -->
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn back" onclick="previousQuestion()" id="backBtn">
+                ← もどる
+            </button>
+            <button class="nav-btn next" onclick="nextQuestion()" disabled id="nextBtn">
+                つぎへ →
+            </button>
+        </div>
+    </div>
+
+    <!-- Completion Screen -->
+    <div class="completion-screen" id="completionScreen" style="display: none;">
+        <div class="completion-icon">🎨</div>
+        <h2 class="completion-title">ありがとうございました！</h2>
+        <p class="completion-text">
+            あなたの気持ちをきかせてくれて、ありがとう。<br>
+            先生があなたの「こころのにじ」を見て、<br>
+            もっと楽しい学校生活になるように考えてくれます。
+        </p>
+        
+        <button class="nav-btn next" onclick="returnToStart()">
+            もう一度やる
+        </button>
+    </div>
+
+    <!-- Teacher Section -->
+    <div class="teacher-section" id="teacherSection" style="display: none;">
+        <h3 class="teacher-title">🍎 先生用：児童の心理状態分析</h3>
+        <p style="text-align: center; color: #742a2a; margin-bottom: 1rem;">
+            対象児童：田中 花子さん（小学4年生）
+        </p>
+
+        <div class="teacher-content">
+            <div class="insights-box">
+                <h4 class="insights-title">📊 心理状態の分析</h4>
+                
+                <div class="insight-item">
+                    <span class="insight-icon">😟</span>
+                    <span>学校での人間関係に不安を感じている可能性があります</span>
+                </div>
+                
+                <div class="insight-item">
+                    <span class="insight-icon">📚</span>
+                    <span>学習面でのプレッシャーを感じているかもしれません</span>
+                </div>
+                
+                <div class="insight-item">
+                    <span class="insight-icon">🏠</span>
+                    <span>家庭での出来事が学校生活に影響している可能性</span>
+                </div>
+                
+                <div class="insight-item">
+                    <span class="insight-icon">💭</span>
+                    <span>自分の気持ちを言葉にするのが苦手な傾向</span>
+                </div>
+            </div>
+
+            <div class="actions-box">
+                <h4 class="insights-title">🎯 おすすめの対応</h4>
+                
+                <button class="action-btn-teacher" onclick="scheduleOneOnOne()">
+                    個別面談の予約
+                </button>
+                
+                <button class="action-btn-teacher" onclick="contactParents()">
+                    保護者への連絡
+                </button>
+                
+                <button class="action-btn-teacher" onclick="classroomSupport()">
+                    クラス内サポート
+                </button>
+                
+                <button class="action-btn-teacher" onclick="counselorReferral()">
+                    カウンセラー相談
+                </button>
+                
+                <button class="action-btn-teacher" onclick="viewHistory()">
+                    過去の記録を見る
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            title: "今日の学校は楽しかったですか？",
+            subtitle: "あなたの気持ちに一番近いものを選んでください",
+            type: "choice",
+            options: [
+                { emoji: "😊", text: "とても楽しかった" },
+                { emoji: "🙂", text: "まあまあ楽しかった" },
+                { emoji: "😐", text: "ふつう" },
+                { emoji: "😕", text: "あまり楽しくなかった" },
+                { emoji: "😢", text: "ぜんぜん楽しくなかった" }
+            ]
+        },
+        {
+            title: "お友達と一緒にいるとき、どんな気持ちになりますか？",
+            subtitle: "いつもの気持ちを教えてください",
+            type: "choice",
+            options: [
+                { emoji: "😄", text: "とても楽しい気持ち" },
+                { emoji: "😊", text: "安心する気持ち" },
+                { emoji: "😐", text: "とくに何も感じない" },
+                { emoji: "😰", text: "ちょっと緊張する" },
+                { emoji: "😔", text: "ひとりの方がいい" }
+            ]
+        },
+        {
+            title: "最近、心配になることはありますか？",
+            subtitle: "どんな小さなことでも大丈夫です",
+            type: "choice",
+            options: [
+                { emoji: "😌", text: "とくに心配なことはない" },
+                { emoji: "🤔", text: "ときどき心配になる" },
+                { emoji: "😟", text: "よく心配になる" },
+                { emoji: "😰", text: "いつも心配している" },
+                { emoji: "😶", text: "よくわからない" }
+            ]
+        },
+        {
+            title: "今の気持ちを色で表すとしたら？",
+            subtitle: "直感で選んでみてください",
+            type: "choice",
+            options: [
+                { emoji: "🌈", text: "にじ色（いろんな色）" },
+                { emoji: "☀️", text: "きいろ（明るい気持ち）" },
+                { emoji: "💙", text: "あお色（落ち着いた気持ち）" },
+                { emoji: "☁️", text: "グレー（もやもやした気持ち）" },
+                { emoji: "🌑", text: "くろ色（重い気持ち）" }
+            ]
+        },
+        {
+            title: "今の気持ちを、絵や物で表すとしたら何ですか？",
+            subtitle: "思ったままを書いてみてください。短くても大丈夫です。",
+            type: "text",
+            placeholder: "例：ふわふわの雲みたい、小さな花みたい、嵐の海みたい..."
+        }
+    ];
+
+    let currentQuestion = 0;
+    let answers = [];
+    let selectedMood = null;
+
+    function selectMood(mood) {
+        // Remove previous selection
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Add selection to clicked button
+        event.target.closest('.mood-btn').classList.add('selected');
+        
+        selectedMood = mood;
+        document.getElementById('startBtn').disabled = false;
+    }
+
+    function startQuestions() {
+        document.getElementById('welcomeSection').style.display = 'none';
+        document.getElementById('questionCard').style.display = 'block';
+        showQuestion();
+        updateProgress();
+    }
+
+    function showQuestion() {
+        const question = questions[currentQuestion];
+        
+        document.getElementById('questionNumber').textContent = `質問 ${currentQuestion + 1}`;
+        document.getElementById('questionTitle').textContent = question.title;
+        document.getElementById('questionSubtitle').textContent = question.subtitle;
+        
+        const optionsContainer = document.getElementById('answerOptions');
+        
+        if (question.type === 'choice') {
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'answer-btn';
+                btn.onclick = () => selectAnswer(index, option.text);
+                btn.innerHTML = `
+                    <span class="answer-emoji">${option.emoji}</span>
+                    <span>${option.text}</span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+        } else if (question.type === 'text') {
+            optionsContainer.innerHTML = `
+                <textarea 
+                    class="text-input" 
+                    placeholder="${question.placeholder}"
+                    oninput="updateNextButton()"
+                    id="textAnswer"
+                ></textarea>
+            `;
+        }
+        
+        document.getElementById('nextBtn').disabled = true;
+        document.getElementById('backBtn').style.display = currentQuestion === 0 ? 'none' : 'block';
+    }
+
+    function selectAnswer(index, text) {
+        // Remove previous selections
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Add selection to clicked button
+        document.querySelectorAll('.answer-btn')[index].classList.add('selected');
+        
+        // Store answer
+        answers[currentQuestion] = text;
+        
+        // Enable next button
+        document.getElementById('nextBtn').disabled = false;
+    }
+
+    function updateNextButton() {
+        const textArea = document.getElementById('textAnswer');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        if (textArea && textArea.value.trim()) {
+            nextBtn.disabled = false;
+            answers[currentQuestion] = textArea.value.trim();
+        } else {
+            nextBtn.disabled = true;
+        }
+    }
+
+    function nextQuestion() {
+        if (currentQuestion === questions.length - 1) {
+            showCompletion();
+            return;
+        }
+        
+        currentQuestion++;
+        showQuestion();
+        updateProgress();
+    }
+
+    function previousQuestion() {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            showQuestion();
+            updateProgress();
+            
+            // Restore previous answer if exists
+            if (answers[currentQuestion]) {
+                const question = questions[currentQuestion];
+                if (question.type === 'choice') {
+                    const buttons = document.querySelectorAll('.answer-btn');
+                    buttons.forEach(btn => {
+                        if (btn.textContent.includes(answers[currentQuestion])) {
+                            btn.classList.add('selected');
+                            document.getElementById('nextBtn').disabled = false;
+                        }
+                    });
+                } else if (question.type === 'text') {
+                    document.getElementById('textAnswer').value = answers[currentQuestion];
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            }
+        }
+    }
+
+    function updateProgress() {
+        const progress = ((currentQuestion + 1) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = progress + '%';
+    }
+
+    function showCompletion() {
+        document.getElementById('questionCard').style.display = 'none';
+        document.getElementById('completionScreen').style.display = 'block';
+        document.getElementById('teacherSection').style.display = 'block';
+        
+        // Update progress to 100%
+        document.getElementById('progressFill').style.width = '100%';
+    }
+
+    function returnToStart() {
+        currentQuestion = 0;
+        answers = [];
+        selectedMood = null;
+        
+        document.getElementById('completionScreen').style.display = 'none';
+        document.getElementById('teacherSection').style.display = 'none';
+        document.getElementById('welcomeSection').style.display = 'block';
+        document.getElementById('progressFill').style.width = '0%';
+        
+        // Reset mood selection
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        document.getElementById('startBtn').disabled = true;
+    }
+
+    // Teacher section functions
+    function scheduleOneOnOne() {
+        alert('個別面談の予約\n\n• カレンダー連携で面談日時を設定\n• 保護者への連絡\n• 面談記録テンプレートの準備\n• フォローアップ予定の作成');
+    }
+
+    function contactParents() {
+        alert('保護者への連絡\n\n• 心配事を優しく共有\n• 家庭での様子についてヒアリング\n• 学校と家庭の連携プラン\n• 専門機関の紹介
+```
