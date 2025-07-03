@@ -734,4 +734,14 @@
     function updateProgress() {
         const progress = ((currentQuestion + 1) / questions.length) * 100;
         document.getElementById('progressFill').style.width = progress + '%';
-        document.getElementById('progressText').textContent = '質問に答えてみよう！';
+
+        document.getElementById('progressText').textContent = 'あと少し！がんばってるね';
+
+        // 他の処理があればここに追記
+    }
+
+    // 初期表示など必要に応じて呼び出す
+    updateProgress();
+</script>
+</body>
+</html>
