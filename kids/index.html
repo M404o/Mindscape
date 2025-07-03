@@ -730,7 +730,60 @@
 
     let currentQuestion = 0;
     let answers = [];
+<script>
+    // 選択肢を描画してイベントをつける関数
+    function loadQuestion() {
+        const q = questions[currentQuestion];
+        document.getElementById('stepIndicator').textContent = q.step;
+        document.getElementById('questionTitle').textContent = q.title;
+        document.getElementById('questionSubtitle').textContent = q.subtitle;
 
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+
+        if (q.type === 'options') {
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                btn.innerHTML = `<div class="emoji">${opt.emoji}</div><div class="text">${opt.title}<br><small>${opt.subtitle}</small></div>`;
+                btn.onclick = () => {
+                    answers[currentQuestion] = idx;
+                    document.getElementById('nextBtn').disabled = false;
+                };
+                container.appendChild(btn);
+            });
+            document.getElementById('nextBtn').disabled = true;
+        } else if (q.type === 'text') {
+            const input = document.createElement('textarea');
+            input.placeholder = q.placeholder;
+            input.oninput = () => {
+                answers[currentQuestion] = input.value.trim();
+                document.getElementById('nextBtn').disabled = input.value.trim() === '';
+            };
+            container.appendChild(input);
+            document.getElementById('nextBtn').disabled = true;
+        }
+    }
+
+    function nextQuestion() {
+        if (currentQuestion < questions.length - 1) {
+            currentQuestion++;
+            loadQuestion();
+        } else {
+            // 結果ページへ遷移または表示
+            alert('診断が完了しました！');
+        }
+    }
+
+    function previousQuestion() {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            loadQuestion();
+        }
+    }
+
+    // 初期化
+    window.onload = loadQuestion;
     function updateProgress() {
         const progress = ((currentQuestion + 1) / questions.length) * 100;
         document.getElementById('progressFill').style.width = progress + '%';
