@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Heart App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: #fefcf5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .app-subtitle {
+            font-size: 18px;
+            color: #718096;
+            margin-bottom: 40px;
+        }
+
+        .start-button {
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .start-button:hover {
+            background-color: #3182ce;
+        }
+
+        .notice {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #a0aec0;
+            text-align: center;
+            max-width: 320px;
+            line-height: 1.6;
+        }
+
+        .admin-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+
+        .admin-button:hover {
+            color: #718096;
+        }
+
+        @media (max-width: 480px) {
+            .app-title {
+                font-size: 24px;
+            }
+            
+            .app-subtitle {
+                font-size: 16px;
+            }
+            
+            .start-button {
+                padding: 18px 50px;
+                font-size: 20px;
+            }
+            
+            .notice {
+                font-size: 11px;
+                bottom: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="app-title">Kids Heart App</h1>
+        <p class="app-subtitle">こどものきもちアプリ</p>
+        
+        <button class="start-button" onclick="startApp()">スタート</button>
+    </div>
+
+    <div class="notice">
+        このアプリは、こどもの気持ちを決めつけるものではなく、<br>
+        お子さんと話すヒントを見つけるためのものです。<br>
+        アプリの情報を参考に、お子さんとの対話を大切にしてください。
+    </div>
+
+    <button class="admin-button" onclick="openAdmin()">管理者画面</button>
+
+    <script>
+        function startApp() {
+            alert('設定画面へ進みます（実装予定）');
+        }
+
+        function openAdmin() {
+            alert('管理者画面（実装予定）');
+        }
+    </script>
+</body>
+</html>
