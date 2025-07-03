@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>こころのにじ診断 - 子ども向け</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro', 'Meiryo', 'メイリオ', sans-serif;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        min-height: 100vh;
+        color: #2d3748;
+        overflow-x: hidden;
+    }
+
+    .floating-elements {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .floating-shape {
+        position: absolute;
+        opacity: 0.6;
+        animation: float 15s infinite linear;
+    }
+
+    .shape-1 { left: 10%; animation-delay: 0s; font-size: 2rem; }
+    .shape-2 { left: 80%; animation-delay: 5s; font-size: 1.5rem; }
+    .shape-3 { left: 50%; animation-delay: 10s; font-size: 1.8rem; }
+
+    @keyframes float {
+        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+        10% { opacity: 0.6; }
+        90% { opacity: 0.6; }
+        100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+
+    .assessment-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 100vh;
+        position: relative;
+        z-index: 2;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 2rem;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        animation: slideInDown 0.8s ease-out;
+    }
+
+    .mascot {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        animation: bounce 2s infinite;
+    }
+
+    .header-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    .header-subtitle {
+        font-size: 1.1rem;
+        color: #718096;
+    }
+
+    .progress-container {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        animation: slideInUp 0.8s ease-out 0.2s both;
+    }
+
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .progress-text {
+        font-size: 1rem;
+        color: #4a5568;
+        font-weight: 600;
+    }
+
+    .progress-emoji {
+        font-size: 1.5rem;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 12px;
+        background: #e2e8f0;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+        border-radius: 6px;
+        transition: width 0.8s ease;
+        width: 0%;
+    }
+
+    .question-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 25px;
+        padding: 3rem 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        animation: questionAppear 0.8s ease-out;
+        position: relative;
+    }
+
+    .question-card::before {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a8edea, #fed6e3);
+        border-radius: 30px;
+        z-index: -1;
+        opacity: 0.3;
+    }
+
+    .step-indicator {
+        display: inline-block;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .question-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        line-height: 1.4;
+        text-align: center;
+    }
+
+    .question-subtitle {
+        font-size: 1.1rem;
+        color: #718096;
+        text-align: center;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .options-grid {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .option-card {
+        background: #ffffff;
+        border: 3px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .option-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 154, 158, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .option-card:hover {
+        transform: translateY(-5px);
+        border-color: #ff9a9e;
+        box-shadow: 0 10px 25px rgba(255, 154, 158, 0.3);
+    }
+
+    .option-card:hover::before {
+        left: 100%;
+    }
+
+    .option-card.selected {
+        border-color: #ff9a9e;
+        background: linear-gradient(135deg, #fff5f5, #fed7d7);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
+    }
+
+    .option-emoji {
+        font-size: 3rem;
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .option-content {
+        flex: 1;
+    }
+
+    .option-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    .option-subtitle {
+        font-size: 1rem;
+        color: #718096;
+        line-height: 1.4;
+    }
+
+    .feeling-scale {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .scale-item {
+        background: #ffffff;
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .scale-item:hover {
+        transform: scale(1.05);
+        border-color: #ff9a9e;
+    }
+
+    .scale-item.selected {
+        border-color: #ff9a9e;
+        background: linear-gradient(135deg, #fff5f5, #fed7d7);
+        transform: scale(1.05);
+    }
+
+    .scale-emoji {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .scale-label {
+        font-size: 0.8rem;
+        color: #4a5568;
+        font-weight: 600;
+    }
+
+    .text-area-container {
+        background: #ffffff;
+        border: 3px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+    }
+
+    .text-area-container:focus-within {
+        border-color: #ff9a9e;
+        box-shadow: 0 0 0 3px rgba(255, 154, 158, 0.1);
+    }
+
+    .text-area {
+        width: 100%;
+        min-height: 120px;
+        border: none;
+        background: transparent;
+        font-size: 1.1rem;
+        font-family: inherit;
+        color: #2d3748;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .text-area:focus {
+        outline: none;
+    }
+
+    .text-area::placeholder {
+        color: #a0aec0;
+        font-style: italic;
+    }
+
+    .helper-text {
+        font-size: 0.9rem;
+        color: #718096;
+        text-align: center;
+        margin-top: 1rem;
+        font-style: italic;
+    }
+
+    .navigation {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .nav-button {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 25px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .nav-button.back {
+        background: #f7fafc;
+        color: #4a5568;
+        border: 2px solid #e2e8f0;
+    }
+
+    .nav-button.back:hover {
+        background: #edf2f7;
+        transform: translateY(-2px);
+    }
+
+    .nav-button.next {
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        color: white;
+        box-shadow: 0 5px 15px rgba(255, 154, 158, 0.4);
+    }
+
+    .nav-button.next:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 154, 158, 0.5);
+    }
+
+    .nav-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .encouragement {
+        background: linear-gradient(135deg, rgba(255, 154, 158, 0.1), rgba(250, 208, 196, 0.1));
+        border: 2px solid rgba(255, 154, 158, 0.3);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        text-align: center;
+    }
+
+    .encouragement-emoji {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .encouragement-text {
+        font-size: 1rem;
+        color: #4a5568;
+        font-weight: 600;
+    }
+
+    .completion-screen {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 25px;
+        padding: 4rem 2rem;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        animation: completionAppear 1s ease-out;
+    }
+
+    .completion-emoji {
+        font-size: 6rem;
+        margin-bottom: 1.5rem;
+        animation: bounce 2s infinite;
+    }
+
+    .completion-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #2d3748;
+        margin-bottom: 1rem;
+    }
+
+    .completion-message {
+        font-size: 1.3rem;
+        color: #4a5568;
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    .rainbow-text {
+        background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a8edea, #fed6e3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 300% 300%;
+        animation: rainbow 3s ease-in-out infinite;
+    }
+
+    @keyframes questionAppear {
+        from { opacity: 0; transform: translateY(30px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes completionAppear {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+
+    @keyframes rainbow {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    @media (max-width: 768px) {
+        .assessment-container {
+            padding: 1rem;
+        }
+        
+        .question-card {
+            padding: 2rem 1.5rem;
+        }
+        
+        .option-card {
+            flex-direction: column;
+            text-align: center;
+            padding: 1.5rem 1rem;
+        }
+        
+        .feeling-scale {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .navigation {
+            flex-direction: column;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-shape shape-1">🌈</div>
+        <div class="floating-shape shape-2">⭐</div>
+        <div class="floating-shape shape-3">🌸</div>
+    </div>
+
+```
+<div class="assessment-container">
+    <!-- Header -->
+    <header class="header">
+        <div class="mascot">🌈</div>
+        <h1 class="header-title">こころのにじ診断</h1>
+        <p class="header-subtitle">あなたの心の色を見つけてみよう</p>
+    </header>
+
+    <!-- Progress -->
+    <div class="progress-container">
+        <div class="progress-header">
+            <span class="progress-text" id="progressText">質問 1 / 12</span>
+            <span class="progress-emoji" id="progressEmoji">🌱</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- Question Card -->
+    <div class="question-card" id="questionCard">
+        <div class="step-indicator" id="stepIndicator">はじめに</div>
+        <h2 class="question-title" id="questionTitle">今日の気分はどうですか？</h2>
+        <p class="question-subtitle" id="questionSubtitle">あなたの今の気持ちに一番近いものを選んでくださいね</p>
+
+        <div class="options-grid" id="optionsContainer">
+            <!-- Options will be dynamically loaded -->
+        </div>
+
+        <div class="encouragement" style="display: none;" id="encouragement">
+            <div class="encouragement-emoji">✨</div>
+            <div class="encouragement-text">いいですね！次の質問に進みましょう</div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-button back" onclick="previousQuestion()" id="backBtn" style="display: none;">
+                ← もどる
+            </button>
+            <button class="nav-button next" onclick="nextQuestion()" disabled id="nextBtn">
+                つぎへ →
+            </button>
+        </div>
+    </div>
+
+    <!-- Completion Screen -->
+    <div class="completion-screen" id="completionScreen" style="display: none;">
+        <div class="completion-emoji">🎨</div>
+        <h2 class="completion-title">
+            <span class="rainbow-text">ありがとうございました！</span>
+        </h2>
+        <p class="completion-message">
+            あなたの心の声をきかせてくれて、本当にありがとう。<br>
+            先生があなたの「こころのにじ」を見て、<br>
+            もっと楽しい毎日になるようにお手伝いしてくれますよ。<br><br>
+            あなたはとても大切な存在です 💖
+        </p>
+        
+        <button class="nav-button next" onclick="restartAssessment()">
+            もう一度やってみる
+        </button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            step: "はじめに",
+            title: "今日の気分はどうですか？",
+            subtitle: "あなたの今の気持ちに一番近いものを選んでくださいね",
+            type: "options",
+            options: [
+                { emoji: "😊", title: "げんき！", subtitle: "今日はとても調子がいいです" },
+                { emoji: "🙂", title: "まあまあ", subtitle: "ふつうの気分です" },
+                { emoji: "😐", title: "よくわからない", subtitle: "どんな気分かはっきりしません" },
+                { emoji: "😔", title: "ちょっとつかれた", subtitle: "少し元気がありません" },
+                { emoji: "😢", title: "かなしい", subtitle: "悲しい気持ちです" }
+            ]
+        },
+        {
+            step: "学校のこと",
+            title: "学校は楽しいですか？",
+            subtitle: "学校にいる時の気持ちを教えてください",
+            type: "scale",
+            question: "学校での気持ち",
+            scale: [
+                { emoji: "😍", label: "だいすき" },
+                { emoji: "😊", label: "すき" },
+                { emoji: "😐", label: "ふつう" },
+                { emoji: "😕", label: "あまり..." },
+                { emoji: "😢", label: "きらい" }
+            ]
+        },
+        {
+            step: "お友達のこと",
+            title: "お友達と一緒にいると、どんな気持ちになりますか？",
+            subtitle: "みんなと過ごす時間について教えてください",
+            type: "options",
+            options: [
+                { emoji: "🥰", title: "とても楽しい", subtitle: "みんなと一緒だと嬉しいです" },
+                { emoji: "😊", title: "安心する", subtitle: "友達がいると落ち着きます" },
+                { emoji: "😐", title: "なんとも思わない", subtitle: "特に何も感じません" },
+                { emoji: "😰", title: "ちょっと疲れる", subtitle: "気を使って疲れることがあります" },
+                { emoji: "😞", title: "ひとりの方がいい", subtitle: "一人でいる方が楽です" }
+            ]
+        },
+        {
+            step: "家のこと",
+            title: "お家での時間はどうですか？",
+            subtitle: "家族と過ごす時間の気持ちを教えてください",
+            type: "scale",
+            question: "家での気持ち",
+            scale: [
+                { emoji: "🏠", label: "だいすき" },
+                { emoji: "😊", label: "すき" },
+                { emoji: "😐", label: "ふつう" },
+                { emoji: "😕", label: "あまり..." },
+                { emoji: "😔", label: "きらい" }
+            ]
+        },
+        {
+            step: "心配ごと",
+            title: "最近、心配になることはありますか？",
+            subtitle: "どんな小さなことでも大丈夫です",
+            type: "options",
+            options: [
+                { emoji: "😌", title: "とくに心配なことはない", subtitle: "毎日安心して過ごしています" },
+                { emoji: "🤔", title: "ちょっとだけ心配", subtitle: "時々気になることがあります" },
+                { emoji: "😟", title: "よく心配になる", subtitle: "いろいろなことが気になります" },
+                { emoji: "😰", title: "いつも心配", subtitle: "毎日心配事があります" },
+                { emoji: "😶", title: "よくわからない", subtitle: "心配かどうかもわかりません" }
+            ]
+        },
+        {
+            step: "気持ち",
+            title: "自分の気持ちを人に話すことはありますか？",
+            subtitle: "嬉しいことや悲しいことを誰かに話しますか？",
+            type: "options",
+            options: [
+                { emoji: "🗣️", title: "よく話す", subtitle: "家族や友達によく話します" },
+                { emoji: "😊", title: "たまに話す", subtitle: "時々話すことがあります" },
+                { emoji: "🤐", title: "あまり話さない", subtitle: "ほとんど話しません" },
+                { emoji: "😞", title: "話したいけど話せない", subtitle: "話したいけど難しいです" },
+                { emoji: "😶", title: "話すことがない", subtitle: "特に話すことがありません" }
+            ]
+        },
+        {
+            step: "元気",
+            title: "疲れた時、どうやって元気になりますか？",
+            subtitle: "あなたの元気の出し方を教えてください",
+            type: "options",
+            options: [
+                { emoji: "😴", title: "ねむる", subtitle: "ゆっくり休むと元気になります" },
+                { emoji: "🎮", title: "好きなことをする", subtitle: "遊んだり趣味をしたりします" },
+                { emoji: "🤗", title: "誰かと話す", subtitle: "家族や友達と話します" },
+                { emoji: "🍭", title: "好きなものを食べる", subtitle: "美味しいものを食べます" },
+                { emoji: "😞", title: "なかなか元気になれない", subtitle: "元気の出し方がわかりません" }
+            ]
+        },
+        {
+            step: "色で表現",
+            title: "今のあなたの気持ちを色で表すとしたら？",
+            subtitle: "心の色を感じてみてください",
+            type: "options",
+            options: [
+                { emoji: "🌈", title: "にじ色", subtitle: "いろんな気持ちが混ざっています" },
+                { emoji: "☀️", title: "きいろ", subtitle: "明るくて暖かい気持ちです" },
+                { emoji: "💙", title: "あお色", subtitle: "落ち着いた静かな気持ちです" },
+                { emoji: "🌸", title: "ピンク色", subtitle: "やさしくて温かい気持ちです" },
+                { emoji: "☁️", title: "グレー", subtitle: "もやもやした気持ちです" }
+            ]
+        },
+        {
+            step: "将来",
+            title: "明日のことを考えると、どんな気持ちになりますか？",
+            subtitle: "これからのことについて教えてください",
+            type: "scale",
+            question: "明日への気持ち",
+            scale: [
+                { emoji: "🤩", label: "楽しみ" },
+                { emoji: "😊", label: "いい感じ" },
+                { emoji: "😐", label: "ふつう" },
+                { emoji: "😟", label: "心配" },
+                { emoji: "😰", label: "不安" }
+            ]
+        },
+        {
+            step: "特別な気持ち",
+            title: "最近、特別に嬉しかったことはありますか？",
+            subtitle: "どんな小さなことでも大丈夫です",
+            type: "options",
+            options: [
+                { emoji: "🎉", title: "とても嬉しいことがあった", subtitle: "すごく楽しい出来事がありました" },
+                { emoji: "😊", title: "ちょっと嬉しいことがあった", subtitle: "少し嬉しいことがありました" },
+                { emoji: "🤔", title: "思い出せない", subtitle: "特に思い浮かびません" },
+                { emoji: "😐", title: "あまりない", subtitle: "嬉しいことはほとんどありません" },
+                { emoji: "😔", title: "嬉しいことがわからない", subtitle: "何が嬉しいのかわかりません" }
+            ]
+        },
+        {
+            step: "お手伝い",
+            title: "困った時、誰かに助けを求めることはできますか？",
+            subtitle: "一人で悩まずに誰かに相談できますか？",
+            type: "options",
+            options: [
+                { emoji: "🙋", title: "すぐに助けを求める", subtitle: "困ったらすぐに誰かに相談します" },
+                { emoji: "🤔", title: "考えてから相談する", subtitle: "少し考えてから相談します" },
+                { emoji: "😞", title: "なかなか言えない", subtitle: "助けを求めるのは難しいです" },
+                { emoji: "🤐", title: "一人でがんばる", subtitle: "一人で解決しようとします" },
+                { emoji: "😶", title: "どうしていいかわからない", subtitle: "困った時の対処法がわかりません" }
+            ]
+        },
+        {
+            step: "最後に",
+            title: "今の気持ちを、絵や物で表すとしたら何ですか？",
+            subtitle: "あなたの心の中を自由に表現してください。短くても大丈夫です。",
+            type: "text",
+            placeholder: "例：ふわふわの雲みたい、きれいな花みたい、静かな森みたい、暖かいお日さまみたい..."
+        }
+    ];
+
+    let currentQuestion = 0;
+    let answers = [];
+
+    function updateProgress() {
+        const progress = ((currentQuestion + 1) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = progress + '%';
+        document.getElementById('progressText').
+```
