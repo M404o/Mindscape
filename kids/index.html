@@ -728,10 +728,9 @@
         }
     ];
 
-    let currentQuestion = 0;
+   let currentQuestion = 0;
     let answers = [];
-    
-    // 選択肢を描画してイベントをつける関数
+
     function loadQuestion() {
         const q = questions[currentQuestion];
         document.getElementById('stepIndicator').textContent = q.step;
@@ -753,6 +752,7 @@
                 container.appendChild(btn);
             });
             document.getElementById('nextBtn').disabled = true;
+
         } else if (q.type === 'text') {
             const input = document.createElement('textarea');
             input.placeholder = q.placeholder;
@@ -762,7 +762,22 @@
             };
             container.appendChild(input);
             document.getElementById('nextBtn').disabled = true;
+
+        } else if (q.type === 'scale') {
+            q.scale.forEach((scaleOpt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                btn.innerHTML = `<div class="emoji">${scaleOpt.emoji}</div><div class="text">${scaleOpt.label}</div>`;
+                btn.onclick = () => {
+                    answers[currentQuestion] = idx;
+                    document.getElementById('nextBtn').disabled = false;
+                };
+                container.appendChild(btn);
+            });
+            document.getElementById('nextBtn').disabled = true;
         }
+
+        updateProgress();
     }
 
     function nextQuestion() {
@@ -770,7 +785,6 @@
             currentQuestion++;
             loadQuestion();
         } else {
-            // 結果ページへ遷移または表示
             alert('診断が完了しました！');
         }
     }
@@ -782,19 +796,11 @@
         }
     }
 
-    // 初期化
-    window.onload = loadQuestion;
     function updateProgress() {
         const progress = ((currentQuestion + 1) / questions.length) * 100;
         document.getElementById('progressFill').style.width = progress + '%';
-
         document.getElementById('progressText').textContent = 'あと少し！がんばってるね';
-
-        // 他の処理があればここに追記
     }
 
-    // 初期表示など必要に応じて呼び出す
-    updateProgress();
+    window.onload = loadQuestion;
 </script>
-</body>
-</html>
