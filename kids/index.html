@@ -728,7 +728,7 @@
         }
     ];
 
-   let currentQuestion = 0;
+  let currentQuestion = 0;
     let answers = [];
 
     function loadQuestion() {
@@ -739,6 +739,7 @@
 
         const container = document.getElementById('optionsContainer');
         container.innerHTML = '';
+        document.getElementById('nextBtn').disabled = true;
 
         if (q.type === 'options') {
             q.options.forEach((opt, idx) => {
@@ -751,7 +752,6 @@
                 };
                 container.appendChild(btn);
             });
-            document.getElementById('nextBtn').disabled = true;
 
         } else if (q.type === 'text') {
             const input = document.createElement('textarea');
@@ -761,7 +761,6 @@
                 document.getElementById('nextBtn').disabled = input.value.trim() === '';
             };
             container.appendChild(input);
-            document.getElementById('nextBtn').disabled = true;
 
         } else if (q.type === 'scale') {
             q.scale.forEach((scaleOpt, idx) => {
@@ -774,10 +773,10 @@
                 };
                 container.appendChild(btn);
             });
-            document.getElementById('nextBtn').disabled = true;
         }
 
         updateProgress();
+        updateButtons();
     }
 
     function nextQuestion() {
@@ -802,5 +801,12 @@
         document.getElementById('progressText').textContent = 'あと少し！がんばってるね';
     }
 
-    window.onload = loadQuestion;
+    function updateButtons() {
+        document.getElementById('nextBtn').onclick = nextQuestion;
+        document.getElementById('prevBtn').onclick = previousQuestion;
+    }
+
+    window.onload = function () {
+        loadQuestion();
+    };
 </script>
