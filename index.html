@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindscape Assessment - Your Inner Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #2d3748;
+        overflow-x: hidden;
+    }
+
+    .assessment-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .progress-section {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 1rem 2rem;
+        z-index: 100;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: rgba(102, 126, 234, 0.2);
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 3px;
+        transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 0%;
+    }
+
+    .progress-text {
+        font-size: 0.9rem;
+        color: #4a5568;
+        text-align: center;
+    }
+
+    .question-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        padding: 3rem;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin-top: 80px;
+        transform: translateY(30px);
+        opacity: 0;
+        animation: slideInUp 0.8s ease-out forwards;
+    }
+
+    .step-indicator {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .question-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #2d3748, #4a5568);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1.3;
+    }
+
+    .question-subtitle {
+        font-size: 1rem;
+        color: #718096;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .options-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .option-button {
+        padding: 1.2rem 1.5rem;
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        background: rgba(102, 126, 234, 0.05);
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+        font-size: 1rem;
+        color: #4a5568;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .option-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .option-button:hover {
+        border-color: rgba(102, 126, 234, 0.4);
+        background: rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    }
+
+    .option-button:hover::before {
+        left: 100%;
+    }
+
+    .option-button.selected {
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.15);
+        color: #2d3748;
+        font-weight: 600;
+    }
+
+    .textarea-container {
+        margin-top: 1rem;
+    }
+
+    .custom-textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 1.5rem;
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        border-radius: 16px;
+        background: rgba(102, 126, 234, 0.05);
+        font-size: 1rem;
+        font-family: inherit;
+        color: #4a5568;
+        resize: vertical;
+        transition: all 0.3s ease;
+    }
+
+    .custom-textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.1);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .custom-textarea::placeholder {
+        color: #a0aec0;
+        font-style: italic;
+    }
+
+    .navigation-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        gap: 1rem;
+    }
+
+    .nav-button {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .nav-button.back {
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+    }
+
+    .nav-button.back:hover {
+        background: rgba(102, 126, 234, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .nav-button.next {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .nav-button.next:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+    }
+
+    .nav-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .final-question {
+        text-align: center;
+    }
+
+    .final-question .question-title {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .final-question .custom-textarea {
+        min-height: 200px;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .completion-screen {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .completion-icon {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 2rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulse 2s infinite;
+    }
+
+    .completion-icon::after {
+        content: '✨';
+        font-size: 3rem;
+    }
+
+    .completion-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .completion-text {
+        font-size: 1.2rem;
+        color: #718096;
+        margin-bottom: 3rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+    }
+
+    .previous-artwork {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: rgba(102, 126, 234, 0.05);
+        border-radius: 16px;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+    }
+
+    .previous-artwork h4 {
+        color: #4a5568;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .artwork-preview {
+        width: 200px;
+        height: 120px;
+        background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb);
+        border-radius: 12px;
+        margin: 0 auto 1rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .artwork-preview::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
+    }
+
+    .reflection-prompt {
+        font-size: 0.9rem;
+        color: #718096;
+        font-style: italic;
+    }
+
+    @keyframes slideInUp {
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    @media (max-width: 768px) {
+        .assessment-container {
+            padding: 1rem;
+        }
+
+        .question-card {
+            padding: 2rem 1.5rem;
+            margin-top: 100px;
+        }
+
+        .question-title {
+            font-size: 1.5rem;
+        }
+
+        .navigation-buttons {
+            flex-direction: column;
+        }
+
+        .nav-button {
+            width: 100%;
+        }
+    }
+
+    .floating-elements {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .floating-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(100vh) rotate(0deg); }
+        100% { transform: translateY(-100px) rotate(360deg); }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-circle" style="left: 10%; width: 60px; height: 60px; animation-delay: 0s;"></div>
+        <div class="floating-circle" style="left: 80%; width: 40px; height: 40px; animation-delay: 7s;"></div>
+        <div class="floating-circle" style="left: 45%; width: 30px; height: 30px; animation-delay: 14s;"></div>
+    </div>
+
+```
+<div class="progress-section">
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">Step 1 of 20 - Getting to know yourself</div>
+</div>
+
+<div class="assessment-container">
+    <div class="question-card" id="questionCard">
+        <!-- Questions will be dynamically loaded here -->
+    </div>
+</div>
+
+<script>
+    const questions = [
+        // STEP 1: Light introduction (1-10)
+        {
+            step: "Step 1 • Gentle Check-in",
+            title: "How is your body feeling today?",
+            subtitle: "Just a simple check-in with yourself. No right or wrong answers.",
+            type: "choice",
+            options: [
+                "Pretty good, feeling energetic",
+                "Okay, nothing special", 
+                "A bit tired but managing",
+                "Not great, feeling heavy",
+                "Honestly not sure how I feel"
+            ]
+        },
+        {
+            step: "Step 1 • Gentle Check-in",
+            title: "When did you last take a deep, slow breath?",
+            subtitle: "Sometimes we forget to breathe deeply in our busy days.",
+            type: "choice",
+            options: [
+                "Just now, actually",
+                "Earlier today",
+                "Yesterday, maybe?",
+                "Can't really remember",
+                "What do you mean by deep breathing?"
+            ]
+        },
+        {
+            step: "Step 1 • Gentle Check-in", 
+            title: "Your mind right now feels...",
+            subtitle: "Think about the mental space you're in at this moment.",
+            type: "choice",
+            options: [
+                "Clear and focused",
+                "A bit scattered with tasks",
+                "Overwhelmed with 'to-dos'",
+                "Foggy and hard to concentrate",
+                "Racing with thoughts"
+            ]
+        },
+        {
+            step: "Step 1 • Gentle Check-in",
+            title: "Your sleep lately has been...",
+            subtitle: "Even when we get enough hours, sometimes we don't feel rested.",
+            type: "choice", 
+            options: [
+                "Restful and energizing",
+                "Decent, waking up okay",
+                "Enough hours but still tired",
+                "Restless and interrupted", 
+                "Hard to fall asleep or stay asleep"
+            ]
+        },
+        {
+            step: "Step 1 • Gentle Check-in",
+            title: "Time for yourself feels...",
+            subtitle: "That space where you can just be, without any expectations.",
+            type: "choice",
+            options: [
+                "Plenty, I make time regularly",
+                "Some, when I can find it",
+                "Limited, always something else to do",
+                "Rare, barely any moments",
+                "What's 'time for myself'?"
+            ]
+        },
+        {
+            step: "Step 1 • Gentle Check-in",
+            title: "Around others, you tend to...",
+            subtitle: "No judgment here - we all navigate social energy differently.",
+            type: "choice",
+            options: [
+                "Feel energized and authentic",
+                "Adapt naturally to the vibe",
+                "Watch and adjust to what's needed",
+                "Feel drained after a while",
+                "Put on a bit of a performance"
+            ]
+        },
+        {
+            step: "Step 1 • Gentle Check-in",
+            title: "Your efforts lately feel...",
+            subtitle: "Sometimes what we put in doesn't match what we get back.",
+            type: "choice",
+            options: [
+                "Rewarding and meaningful",
+                "Worth it, seeing some progress",
+                "Okay but could be better",
+                "Like I'm spinning my wheels",
+                "Exhausting with little payoff"
+            ]
+        },
+        {
+            step: "Step 1 • Gentle Check-in",
+            title: "When something bothers you...",
+            subtitle: "We all process difficult feelings in our own ways.",
+            type: "choice",
+            options: [
+                "I talk it through with someone",
+                "I think about it until I understand",
+                "I try to distract myself",
+                "I keep it to myself usually",
+                "I'm not sure what I do"
+            ]
+        },
+        {
+            step: "Step 1 • Gentle Check-in",
+            title: "Confusing emotions feel...",
+            subtitle: "Sometimes our feelings don't make perfect sense, and that's human.",
+            type: "choice",
+            options: [
+                "Interesting to explore",
+                "Uncomfortable but manageable",
+                "Frustrating and messy",
+                "Scary or overwhelming",
+                "I try not to think about them"
+            ]
+        },
+        {
+            step: "Step 1 • Gentle Check-in",
+            title: "Parts of yourself that others don't see...",
+            subtitle: "We all have inner worlds that remain private.",
+            type: "choice",
+            options: [
+                "I'm pretty open about most things",
+                "Some things I keep private",
+                "Quite a bit I don't share",
+                "Most of my real feelings stay hidden",
+                "I'm not sure what I'm hiding"
+            ]
+        },
+
+        // STEP 2: Deeper reflection (11-15)
+        {
+            step: "Step 2 • Reflection Space",
+            title: "What would you say to yourself right now?",
+            subtitle: "If you could offer yourself some kind words, what would they be?",
+            type: "text",
+            placeholder: "You're doing okay... / Take it easy... / Whatever feels right to say..."
+        },
+        {
+            step: "Step 2 • Reflection Space", 
+            title: "If you had one extra hour today...",
+            subtitle: "No obligations, no shoulds - just whatever your heart wants.",
+            type: "text",
+            placeholder: "Sleep, walk, call someone, sit quietly, create something..."
+        },
+        {
+            step: "Step 2 • Reflection Space",
+            title: "Something that makes you feel wistful...",
+            subtitle: "Those bittersweet moments or memories that stir something gentle in you.",
+            type: "text", 
+            placeholder: "A song, a memory, a place, a feeling from the past..."
+        },
+        {
+            step: "Step 2 • Reflection Space",
+            title: "The feeling you're carrying most lately...",
+            subtitle: "What emotion or mood has been your quiet companion recently?",
+            type: "text",
+            placeholder: "Tired, hopeful, restless, content, uncertain..."
+        },
+        {
+            step: "Step 2 • Reflection Space",
+            title: "Anything else stirring in your heart?",
+            subtitle: "This is your space to share whatever wants to be expressed.",
+            type: "text",
+            placeholder: "Whatever is on your mind or in your heart right now..."
+        },
+
+        // STEP 3: Pattern recognition (16-19)
+        {
+            step: "Step 3 • Understanding You",
+            title: "Your emotions and words...",
+            subtitle: "How easily do your feelings translate into language?",
+            type: "choice",
+            options: [
+                "I can usually find the right words",
+                "Sometimes words capture it, sometimes not",
+                "I feel more than I can express",
+                "Words often feel inadequate",
+                "I prefer other ways of expressing myself"
+            ]
+        },
+        {
+            step: "Step 3 • Understanding You",
+            title: "Other people's feelings...",
+            subtitle: "How naturally do you pick up on what others are experiencing?",
+            type: "choice",
+            options: [
+                "I sense them easily, sometimes too much",
+                "I notice them and usually understand",
+                "I pick up on obvious emotions",
+                "I need them to tell me directly",
+                "I'm often surprised by how others feel"
+            ]
+        },
+        {
+            step: "Step 3 • Understanding You",
+            title: "When you feel unsettled...", 
+            subtitle: "What's your natural response to emotional discomfort?",
+            type: "choice",
+            options: [
+                "I reach out and talk it through",
+                "I think and reflect until it makes sense",
+                "I wait for it to pass naturally",
+                "I try to push through and stay busy",
+                "I'm not sure what I do"
+            ]
+        },
+        {
+            step: "Step 3 • Understanding You",
+            title: "Uncertainty feels...",
+            subtitle: "When you don't know what you're feeling or what's happening.",
+            type: "choice",
+            options: [
+                "Like an adventure to explore",
+                "Uncomfortable but I can handle it",
+                "Frustrating, I want clarity",
+                "Anxiety-provoking and unsettling", 
+                "I don't really notice it"
+            ]
+        },
+
+        // STEP 4: Heart expression (20)
+        {
+            step: "Step 4 • Your Heart's Voice",
+            title: "Your inner landscape right now...",
+            subtitle: "If your current emotional state was a scene, a feeling, a color, or a story - what would it be? Let your heart speak in whatever way feels natural.",
+            type: "text",
+            placeholder: "A quiet forest at dusk... / Waves gently lapping the shore... / A warm room with soft light... / Clouds gathering before rain... / Whatever image or feeling comes to you...",
+            final: true
+        }
+    ];
+
+    let currentQuestion = 0;
+    let answers = [];
+
+    function updateProgress() {
+        const progress = ((currentQuestion + 1) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = progress + '%';
+        
+        let progressLabel = '';
+        if (currentQuestion < 10) {
+            progressLabel = `Step ${currentQuestion + 1} of 20 - Getting to know yourself`;
+        } else if (currentQuestion < 15) {
+            progressLabel = `Step ${currentQuestion + 1} of 20 - Exploring deeper`;
+        } else if (currentQuestion < 19) {
+            progressLabel = `Step ${currentQuestion + 1} of 20 - Understanding your patterns`;
+        } else {
+            progressLabel = `Step ${currentQuestion + 1} of 20 - Expressing your heart`;
+        }
+        
+        document.getElementById('progressText').textContent = progressLabel;
+    }
+
+    function renderQuestion() {
+        const question = questions[currentQuestion];
+        const card = document.getElementById('questionCard');
+        
+        if (question.final) {
+            card.className = 'question-card final-question';
+        } else {
+            card.className = 'question-card';
+        }
+        
+        let optionsHTML = '';
+        
+        if (question.type === 'choice') {
+            optionsHTML = `
+                <div class="options-container">
+                    ${question.options.map((option, index) => `
+                        <button class="option-button" onclick="selectOption(${index}, '${option.replace(/'/g, "\\'")}')">
+                            ${option}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        } else if (question.type === 'text') {
+            optionsHTML = `
+                <div class="textarea-container">
+                    <textarea 
+                        class="custom-textarea" 
+                        placeholder="${question.placeholder}"
+                        id="textAnswer"
+                        oninput="updateNextButton()"
+                    ></textarea>
+                </div>
+            `;
+        }
+
+        card.innerHTML = `
+            <div class="step-indicator">${question.step}</div>
+            <h2 class="question-title">${question.title}</h2>
+            <p class="question-subtitle">${question.subtitle}</p>
+            ${optionsHTML}
+            <div class="navigation-buttons">
+                <button class="nav-button back" onclick="previousQuestion()" ${currentQuestion === 0 ? 'style="visibility: hidden;"' : ''}>
+                    ← Back
+                </button>
+                <button class="nav-button next" id="nextButton" onclick="nextQuestion()" disabled>
+                    ${currentQuestion === questions.length - 1 ? 'Complete Assessment' : 'Continue'} →
+                </button>
+            </div>
+        `;
+        
+        // Re-trigger animation
+        card.style.animation = 'none';
+        card.offsetHeight; // Trigger reflow
+        card.style.animation = 'slideInUp 0.8s ease-out forwards';
+        
+        updateProgress();
+    }
+
+    function selectOption(index, text) {
+        // Remove previous selections
+        document.querySelectorAll('.option-button').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Add selection to clicked button
+        document.querySelectorAll('.option-button')[index].classList.add('selected');
+        
+        // Store answer
+        answers[currentQuestion] = text;
+        
+        // Enable next button
+        document.getElementById('nextButton').disabled = false;
+    }
+
+    function updateNextButton() {
+        const textArea = document.getElementById('textAnswer');
+        const nextButton = document.getElementById('nextButton');
+        
+        if (textArea && textArea.value.trim()) {
+            nextButton.disabled = false;
+            answers[currentQuestion] = textArea.value.trim();
+        } else {
+            nextButton.disabled = true;
+        }
+    }
+
+    function nextQuestion() {
+        if (currentQuestion === questions.length - 1) {
+            showCompletion();
+            return;
+        }
+        
+        currentQuestion++;
+        renderQuestion();
+    }
+
+    function previousQuestion() {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            renderQuestion();
+            
+            // Restore previous answer if exists
+            if (answers[currentQuestion]) {
+                const question = questions[currentQuestion];
+                if (question.type === 'choice') {
+                    // Find and select the previously chosen option
+                    const buttons = document.querySelectorAll('.option-button');
+                    buttons.forEach(btn => {
+                        if (btn.textContent === answers[currentQuestion]) {
+                            btn.classList.add('selected');
+                            document.getElementById('nextButton').disabled = false;
+                        }
+                    });
+                } else if (question.type === 'text') {
+                    document.getElementById('textAnswer').value = answers[currentQuestion];
+                    document.getElementById('nextButton').disabled = false;
+                }
+            }
+        }
+    }
+
+    function showCompletion() {
+        const card = document.getElementById('questionCard');
+        
+        // Update progress to 100%
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressText').textContent = 'Assessment Complete - Creating your heart's landscape...';
+        
+        card.innerHTML = `
+            <div class="completion-screen">
+                <div class="completion-icon"></div>
+                <h2 class="completion-title">Your Heart Has Been Heard</h2>
+                <p class="completion-text">
+                    Thank you for taking this journey inward. We're now creating a unique visual representation of your inner landscape. You'll receive your personalized heart's image within 24 hours.
+                </p>
+                
+                <div class="previous-artwork">
+                    <h4>Your Previous Heart's Landscape</h4>
+                    <div class="artwork-preview"></div>
+                    <p class="reflection-prompt">
+                        "Gentle waves meeting a quiet shore under starlight"
+                    </p>
+                    <p style="font-size: 0.85rem; color: #a0aec0; margin-top: 1rem;">
+                        How does this compare to how you're feeling today?
+                    </p>
+                </div>
+                
+                <button class="nav-button next" onclick="returnToDashboard()" style="margin-top: 2rem;">
+                    Return to Wellness Gallery →
+                </button>
+            </div>
+        `;
+        
+        // Re-trigger animation
+        card.style.animation = 'none';
+        card.offsetHeight;
+        card.style.animation = 'slideInUp 0.8s ease-out forwards';
+    }
+
+    function returnToDashboard() {
+        alert('Returning to your Wellness Gallery...\n\nThis would navigate back to the main dashboard where you can:\n• View your assessment history\n• See team wellness trends\n• Access support resources');
+    }
+
+    // Initialize
+    renderQuestion();
+</script>
+```
+
+</body>
+</html>
