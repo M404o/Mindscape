@@ -824,7 +824,44 @@ card.style.animation = 'slideInUp 0.8s ease-out forwards';
     function returnToDashboard() {
         alert('Returning to your Wellness Gallery...\n\nThis would navigate back to the main dashboard where you can:\n• View your assessment history\n• See team wellness trends\n• Access support resources');
     }
-
+// 診断サイトのcompletion画面で
+async function generateHeartImage() {
+    // 診断結果をまとめる
+    const diagnosticResults = {
+        step1: answers1,
+        step2: answers2, 
+        step3: answers3,
+        step4: finalComment
+    };
+    
+    // あなたのローカルサイトと同じ仕組み
+    const gptResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "process.env.Mindscape_OPENAI_KEY;"
+        },
+        body: JSON.stringify({
+            model: "gpt-4",
+            messages: [
+                { role: "system", content: "あなたは心理診断結果をMidjourney用のプロンプトに変換する専門AIです。" },
+                { role: "user", content: `この診断結果をMidjourney用の英語プロンプトにしてください：\n${JSON.stringify(diagnosticResults)}` }
+            ]
+        })
+    });
+    
+    const gptData = await gptResponse.json();
+    const mjPrompt = gptData.choices[0].message.content;
+    
+    // Discord Webhook送信
+    await fetch("https://m404o.github.io/Mindscape/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            content: `/imagine prompt: ${mjPrompt}`
+        })
+    });
+}
     // Initialize
     renderQuestion();
 </script>
