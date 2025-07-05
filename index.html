@@ -821,7 +821,15 @@ function copyResults() {
     console.log("全回答データ:", answers);
     console.log("回答数:", answers.length);
     console.log("質問数:", questions.length);
+    // 1〜19問目の診断結果
+    const diagnosticAnswers = answers.slice(0, 19);
     
+    // 20問目の心象風景
+    const heartLandscape = answers[19];
+    
+    console.log("診断用データ(1-19):", diagnosticAnswers);
+    console.log("画像用データ(20):", heartLandscape);
+
         
         // 診断サイトのcompletion画面で
 async function generateHeartImage() {
