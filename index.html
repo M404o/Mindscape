@@ -823,21 +823,6 @@ function copyResults() {
     console.log("画像用データ(20):", heartLandscape);
 
         
-        // 診断サイトのcompletion画面で
-
-    // 診断結果をまとめる
-    const diagnosticResults = {
-        step1: answers1,
-        step2: answers2, 
-        step3: answers3,
-        step4: finalComment
-    };
-
-    
-    const gptData = await gptResponse.json();
-    const mjPrompt = gptData.choices[0].message.content;
-    
-        
 // HTMLを短く分割して安全に
 let completionHTML = '<div class="completion-screen">';
 completionHTML += '<div class="completion-icon"></div>';
