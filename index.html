@@ -832,7 +832,7 @@ async function generateHeartImage() {
         step3: answers3,
         step4: finalComment
     };
-/ コピペ用データ作成
+// コピペ用データ作成
     let diagnosticText = "=== 心理診断用データ ===\n";
     diagnosticAnswers.forEach((answer, index) => {
         diagnosticText += `Q${index + 1}: ${answer}\n`;
@@ -850,6 +850,7 @@ async function generateHeartImage() {
             <button onclick="alert('コピー機能は次で追加！')">データをコピー</button>
         </div>
     `;
+
     
     // あなたのローカルサイトと同じ仕組み
     const gptResponse = await fetch("https://api.openai.com/v1/chat/completions", {
