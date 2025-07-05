@@ -785,11 +785,11 @@ function showCompletion() {
     console.log("★ showCompletion関数が呼ばれました！");
     console.log("answers:", answers);
     console.log("answers.length:", answers.length);
-    
+    console.log("ここまで来ました1");  // ←追加
     // ★新しく追加★ 
     const diagnosticData = answers.slice(0, 19).join('\n');
     const heartImage = answers[19];
-    
+    console.log("ここまで来ました2");  // ←追加
     console.log("診断用データ:", diagnosticData);
     console.log("画像用データ:", heartImage);
     
