@@ -781,14 +781,19 @@
             }
         }
 
-            function showCompletion() {
-    console.log("★ showCompletion関数が呼ばれました！");  // ←これを一番最初に追加
-    console.log("answers:", answers);
-            const card = document.getElementById('questionCard');
-
-// ★シンプルなデータ確認★
+function showCompletion() {
+    console.log("★ showCompletion関数が呼ばれました！");
     console.log("answers:", answers);
     console.log("answers.length:", answers.length);
+    
+    // ★新しく追加★ 
+    const diagnosticData = answers.slice(0, 19).join('\n');
+    const heartImage = answers[19];
+    
+    console.log("診断用データ:", diagnosticData);
+    console.log("画像用データ:", heartImage);
+    
+    const card = document.getElementById('questionCard'); 
 
 // HTMLを短く分割して安全に
 let completionHTML = '<div class="completion-screen">';
