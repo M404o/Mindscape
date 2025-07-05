@@ -833,23 +833,6 @@ function copyResults() {
         step4: finalComment
     };
 
-
-    
-    // あなたのローカルサイトと同じ仕組み
-    const gptResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "process.env.Mindscape_OPENAI_KEY;"
-        },
-        body: JSON.stringify({
-            model: "gpt-4",
-            messages: [
-                { role: "system", content: "あなたは心理診断結果をMidjourney用のプロンプトに変換する専門AIです。" },
-                { role: "user", content: `この診断結果をMidjourney用の英語プロンプトにしてください：\n${JSON.stringify(diagnosticResults)}` }
-            ]
-        })
-    });
     
     const gptData = await gptResponse.json();
     const mjPrompt = gptData.choices[0].message.content;
