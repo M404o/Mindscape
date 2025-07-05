@@ -781,8 +781,11 @@
             }
         }
 
-        function showCompletion() {
+            function showCompletion() {
+    console.log("★ showCompletion関数が呼ばれました！");  // ←これを一番最初に追加
+    console.log("answers:", answers);
             const card = document.getElementById('questionCard');
+
 // ★シンプルなデータ確認★
     console.log("answers:", answers);
     console.log("answers.length:", answers.length);
