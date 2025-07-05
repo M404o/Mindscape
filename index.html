@@ -816,7 +816,14 @@ function copyResults() {
         // Update progress to 100%
         document.getElementById('progressFill').style.width = '100%';
 　　　　　document.getElementById('progressText').textContent = 'Assessment Complete - Creating your heart\'s landscape...';
-// 診断サイトのcompletion画面で
+
+        // ★ デバッグ用：answers配列をチェック ★
+    console.log("全回答データ:", answers);
+    console.log("回答数:", answers.length);
+    console.log("質問数:", questions.length);
+    
+        
+        // 診断サイトのcompletion画面で
 async function generateHeartImage() {
     // 診断結果をまとめる
     const diagnosticResults = {
@@ -846,7 +853,7 @@ async function generateHeartImage() {
     const mjPrompt = gptData.choices[0].message.content;
     
     // Discord Webhook送信
-    await fetch("https://m404o.github.io/Mindscape/", {
+    await fetch("https://discord.com/api/webhooks/1384480294375129150/GYuYMQjbjPaqHi1F7yGBpXErmI1XANmgXcAFs5T0XBJ0Yt63ZtzdG27XbumEkwZQHYhm", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
