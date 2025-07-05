@@ -824,7 +824,7 @@ function copyResults() {
 
         
         // 診断サイトのcompletion画面で
-async function generateHeartImage() {
+
     // 診断結果をまとめる
     const diagnosticResults = {
         step1: answers1,
@@ -832,7 +832,7 @@ async function generateHeartImage() {
         step3: answers3,
         step4: finalComment
     };
-}
+
 
     
     // あなたのローカルサイトと同じ仕組み
@@ -854,15 +854,6 @@ async function generateHeartImage() {
     const gptData = await gptResponse.json();
     const mjPrompt = gptData.choices[0].message.content;
     
-    // Discord Webhook送信
-    await fetch("https://discord.com/api/webhooks/1384480294375129150/GYuYMQjbjPaqHi1F7yGBpXErmI1XANmgXcAFs5T0XBJ0Yt63ZtzdG27XbumEkwZQHYhm", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            content: `/imagine prompt: ${mjPrompt}`
-        })
-    });
-}
         
 // HTMLを短く分割して安全に
 let completionHTML = '<div class="completion-screen">';
