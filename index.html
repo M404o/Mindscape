@@ -652,23 +652,15 @@
 
     function showCompletion() {
     const card = document.getElementById('questionCard');
-    
-        
-// ★ 回答データを表示する部分を追加 ★
-    let resultsText = "=== 診断結果 ===\n";
-    answers.forEach((answer, index) => {
-        resultsText += `Q${index + 1}: ${answer}\n`;
-    });
+ // コピペ用データ表示
+    const copyText = `診断結果:\n${answers.join('\n')}\n\n心象風景:\n${answers[19]}`;
     
     card.innerHTML = `
-        <div class="completion-screen">
-            <h2>診断完了！</h2>
-            <p>以下のデータをコピーして、画像生成サイトに貼り付けてください</p>
-            <textarea readonly style="width:100%; height:200px;">${resultsText}</textarea>
-            <button onclick="copyResults()">結果をコピー</button>
-        </div>
-    `;
-}
+        <textarea readonly style="width:100%;height:300px;">${copyText}</textarea>
+        <button onclick="copyToClipboard('${copyText}')">コピー</button>
+    `;   
+        
+
 
 function copyResults() {
     // クリップボードにコピー
