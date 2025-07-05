@@ -783,10 +783,9 @@
 
         function showCompletion() {
             const card = document.getElementById('questionCard');
-            
-            // Update progress to 100%
-document.getElementById('progressFill').style.width = '100%';
-document.getElementById('progressText').textContent = 'Assessment Complete - Creating your heart\'s landscape...';
+// ★シンプルなデータ確認★
+    console.log("answers:", answers);
+    console.log("answers.length:", answers.length);
 
 // HTMLを短く分割して安全に
 let completionHTML = '<div class="completion-screen">';
