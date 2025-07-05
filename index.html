@@ -790,40 +790,7 @@
         
         // Update progress to 100%
         document.getElementById('progressFill').style.width = '100%';
-document.getElementById('progressText').textContent = 'Assessment Complete - Creating your heart\'s landscape...';
-
-// HTMLを短く分割して安全に
-let completionHTML = '<div class="completion-screen">';
-completionHTML += '<div class="completion-icon"></div>';
-completionHTML += '<h2 class="completion-title">Your Heart Has Been Heard</h2>';
-completionHTML += '<p class="completion-text">';
-completionHTML += 'Thank you for taking this journey inward. We\'re now creating a unique visual representation of your inner landscape. ';
-completionHTML += 'You\'ll receive your personalized heart\'s image within 24 hours.';
-completionHTML += '</p>';
-completionHTML += '<div class="previous-artwork">';
-completionHTML += '<h4>Your Previous Heart\'s Landscape</h4>';
-completionHTML += '<div class="artwork-preview"></div>';
-completionHTML += '<p class="reflection-prompt">"Gentle waves meeting a quiet shore under starlight"</p>';
-completionHTML += '<p style="font-size: 0.85rem; color: #a0aec0; margin-top: 1rem;">';
-completionHTML += 'How does this compare to how you\'re feeling today?';
-completionHTML += '</p>';
-completionHTML += '</div>';
-completionHTML += '<button class="nav-button next" onclick="returnToDashboard()" style="margin-top: 2rem;">';
-completionHTML += 'Return to Wellness Gallery →';
-completionHTML += '</button>';
-completionHTML += '</div>';
-
-card.innerHTML = completionHTML;
-
-// Re-trigger animation
-card.style.animation = 'none';
-card.offsetHeight;
-card.style.animation = 'slideInUp 0.8s ease-out forwards';
-    }
-
-    function returnToDashboard() {
-        alert('Returning to your Wellness Gallery...\n\nThis would navigate back to the main dashboard where you can:\n• View your assessment history\n• See team wellness trends\n• Access support resources');
-    }
+　　　　　document.getElementById('progressText').textContent = 'Assessment Complete - Creating your heart\'s landscape...';
 // 診断サイトのcompletion画面で
 async function generateHeartImage() {
     // 診断結果をまとめる
@@ -862,6 +829,40 @@ async function generateHeartImage() {
         })
     });
 }
+        
+// HTMLを短く分割して安全に
+let completionHTML = '<div class="completion-screen">';
+completionHTML += '<div class="completion-icon"></div>';
+completionHTML += '<h2 class="completion-title">Your Heart Has Been Heard</h2>';
+completionHTML += '<p class="completion-text">';
+completionHTML += 'Thank you for taking this journey inward. We\'re now creating a unique visual representation of your inner landscape. ';
+completionHTML += 'You\'ll receive your personalized heart\'s image within 24 hours.';
+completionHTML += '</p>';
+completionHTML += '<div class="previous-artwork">';
+completionHTML += '<h4>Your Previous Heart\'s Landscape</h4>';
+completionHTML += '<div class="artwork-preview"></div>';
+completionHTML += '<p class="reflection-prompt">"Gentle waves meeting a quiet shore under starlight"</p>';
+completionHTML += '<p style="font-size: 0.85rem; color: #a0aec0; margin-top: 1rem;">';
+completionHTML += 'How does this compare to how you\'re feeling today?';
+completionHTML += '</p>';
+completionHTML += '</div>';
+completionHTML += '<button class="nav-button next" onclick="returnToDashboard()" style="margin-top: 2rem;">';
+completionHTML += 'Return to Wellness Gallery →';
+completionHTML += '</button>';
+completionHTML += '</div>';
+
+card.innerHTML = completionHTML;
+
+// Re-trigger animation
+card.style.animation = 'none';
+card.offsetHeight;
+card.style.animation = 'slideInUp 0.8s ease-out forwards';
+    }
+
+    function returnToDashboard() {
+        alert('Returning to your Wellness Gallery...\n\nThis would navigate back to the main dashboard where you can:\n• View your assessment history\n• See team wellness trends\n• Access support resources');
+    }
+
     // Initialize
     renderQuestion();
 </script>
