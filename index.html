@@ -807,31 +807,8 @@ completionHTML += '<button class="nav-button next" onclick="returnToDashboard()"
 completionHTML += 'Return to Wellness Gallery →';
 completionHTML += '</button>';
 completionHTML += '</div>';
-            card.innerHTML = `
-                <div class="completion-screen">
-                    <div class="completion-icon"></div>
-                    <h2 class="completion-title">Your Heart Has Been Heard</h2>
-                    <p class="completion-text">
-                        Thank you for taking this journey inward. We're now creating a unique visual representation of your inner landscape. You'll receive your personalized heart's image within 24 hours.
-                    </p>
-                    
-                    <div class="previous-artwork">
-                        <h4>Your Previous Heart's Landscape</h4>
-                        <div class="artwork-preview"></div>
-                        <p class="reflection-prompt">
-                            "Gentle waves meeting a quiet shore under starlight"
-                        </p>
-                        <p style="font-size: 0.85rem; color: #a0aec0; margin-top: 1rem;">
-                            How does this compare to how you're feeling today?
-                        </p>
-                    </div>
-                    
-                    <button class="nav-button next" onclick="returnToDashboard()" style="margin-top: 2rem;">
-                        Return to Wellness Gallery →
-                    </button>
-                </div>
-            `;
-            
+            card.innerHTML = completionHTML;
+
             // Re-trigger animation
             card.style.animation = 'none';
             card.offsetHeight;
