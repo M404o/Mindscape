@@ -787,6 +787,7 @@ function showCompletion() {
     console.log("answers.length:", answers.length);
     console.log("ここまで来ました1");  // ←追加
     // ★新しく追加★ 
+    const card = document.getElementById('questionCard'); 
     const diagnosticData = answers.slice(0, 19).join('\n');
     const heartImage = answers[19];
     console.log("ここまで来ました2");  // ←追加
@@ -806,7 +807,7 @@ card.innerHTML = `
         <button onclick="alert('データをコピーしました！')">データをコピー</button>
     </div>
 `;
-    const card = document.getElementById('questionCard'); 
+
 
 // HTMLを短く分割して安全に 既存のコードを少し修正
 let completionHTML = '<div class="completion-screen">';
