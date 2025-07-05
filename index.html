@@ -785,10 +785,10 @@
             const card = document.getElementById('questionCard');
             
             // Update progress to 100%
-            document.getElementById('progressFill').style.width = '100%';
-            document.getElementById('progressText').textContent = 'Assessment Complete - Creating your heart's landscape...';
-                
-            // HTMLを短く分割して安全に
+document.getElementById('progressFill').style.width = '100%';
+document.getElementById('progressText').textContent = 'Assessment Complete - Creating your heart\'s landscape...';
+
+// HTMLを短く分割して安全に
 let completionHTML = '<div class="completion-screen">';
 completionHTML += '<div class="completion-icon"></div>';
 completionHTML += '<h2 class="completion-title">Your Heart Has Been Heard</h2>';
@@ -808,12 +808,14 @@ completionHTML += '<button class="nav-button next" onclick="returnToDashboard()"
 completionHTML += 'Return to Wellness Gallery →';
 completionHTML += '</button>';
 completionHTML += '</div>';
-            card.innerHTML = completionHTML;
 
-            // Re-trigger animation
-            card.style.animation = 'none';
-            card.offsetHeight;
-            card.style.animation = 'slideInUp 0.8s ease-out forwards';
+card.innerHTML = completionHTML;
+
+// Re-trigger animation
+card.style.animation = 'none';
+card.offsetHeight;
+card.style.animation = 'slideInUp 0.8s ease-out forwards';
+
         }
 
         function returnToDashboard() {
